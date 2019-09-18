@@ -3,16 +3,16 @@
 
 
 //LED FIXED GLOBAL
-#define DATA_PIN 12                                             // Data pin to connect to the strip.
+#define DATA_PIN 12                                           // Data pin to connect to the strip.
 #define COLOR_ORDER GRB                                       // It's GRB for WS2812 and BGR for APA102.
-#define LED_TYPE WS2812                                       // Using APA102, WS2812, WS2801. Don't forget to change LEDS.addLeds.
+#define LED_TYPE WS2812                                       //
 #define NUM_LEDS 43                                           // Number of LED's.
 
 // LED changeable global variables.
 uint8_t max_bright = 64;                                      // Overall brightness definition. It can be changed on the fly.
 struct CRGB leds[NUM_LEDS];                                   // Initialize our LED array.
-TBlendType    currentBlending = LINEARBLEND;                                // NOBLEND or LINEARBLEND
-uint16_t defaultPatternSpeed = 10;                            //variable to hold pattern speed, for now used as a default
+TBlendType    currentBlending = LINEARBLEND;                  // NOBLEND or LINEARBLEND
+
 
 
 void setup() {
@@ -26,13 +26,9 @@ void setup() {
 }
 
 void loop() {
-  EVERY_N_MILLISECONDS(defaultPatternSpeed) {
-    colorDrops();
-  }
-
+  colorDrops();
   FastLED.show();
 }
-
 
 void colorDrops() {
 
@@ -53,15 +49,15 @@ void colorDrops() {
   for (int i = 0; i < NUM_LEDS; i++) {
 
     //set color of each pixel
-    if(dropColorRepeats){
-    leds[i] = ColorFromPalette(currentPalette, (((i+time)%dropWidth)*stripDelta) + (time*timeDelta) + baseHue , 255, currentBlending); //dropColorRepeats true and static color while moving      
+    if (dropColorRepeats) {
+      leds[i] = ColorFromPalette(currentPalette, (((i + time) % dropWidth) * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); //dropColorRepeats true and static color while moving
     }
     else {
-    leds[i] = ColorFromPalette(currentPalette, (i*stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); //((i % dropWidth)*stripDelta)+(time*timeDelta)      
+      leds[i] = ColorFromPalette(currentPalette, (i * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); //((i % dropWidth)*stripDelta)+(time*timeDelta)
     }
 
     //do some math to create the fading trail
-    uint8_t fadeIndex = (i + time) % dropWidth; 
+    uint8_t fadeIndex = (i + time) % dropWidth;
     uint16_t thisFade = fadeIndex * fade;  //this can result in a number that is larger than 8 bit, so make 16 to avoid rollover
     thisFade = constrain(thisFade, 0, 255); //constrain result to 8 bit w/o rolling over. clamp at 255 on high end
     leds[i].fadeToBlackBy(thisFade);
