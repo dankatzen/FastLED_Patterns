@@ -39,8 +39,8 @@ void colorDrops() {
 
   //Variables control the color/gradient the drops
   bool dropColorRepeats = true; //each drop is same color, or does each drop differ?
-  uint8_t stripDelta = 7; // solid color or gradient across each drop?
-  uint8_t timeDelta = 0;  // time change color. if dropColorRepeats=true, set to 0 to keep drop static as it moves. if dropColorRepeats = false, set = to stripDelta to keep static
+  uint8_t stripDelta = 7; // solid color or gradient across each drop? 0 is solid color, higher is more gradient
+  uint8_t timeDelta = 0;  // time change color. if dropColorRepeats=true, set to 0 to keep drop static as it moves. if dropColorRepeats = false, set = to stripDelta to keep static. Or don't and let the color change as the drop moves.
   uint8_t baseHue = 196;   // if selecting static color above, use this to choose color
   static CRGBPalette16 currentPalette = RainbowColors_p ;  // change palette for underlying color. can bring in custom.
 
@@ -50,10 +50,10 @@ void colorDrops() {
 
     //set color of each pixel
     if (dropColorRepeats) {
-      leds[i] = ColorFromPalette(currentPalette, (((i + time) % dropWidth) * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); //dropColorRepeats true and static color while moving
+      leds[i] = ColorFromPalette(currentPalette, (((i + time) % dropWidth) * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); 
     }
     else {
-      leds[i] = ColorFromPalette(currentPalette, (i * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); //((i % dropWidth)*stripDelta)+(time*timeDelta)
+      leds[i] = ColorFromPalette(currentPalette, (i * stripDelta) + (time * timeDelta) + baseHue , 255, currentBlending); 
     }
 
     //do some math to create the fading trail
